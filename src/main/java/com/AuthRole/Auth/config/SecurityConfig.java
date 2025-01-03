@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
                             .requestMatchers("/account").permitAll()
                             .requestMatchers("/account/login").permitAll()
                             .requestMatchers("/account/register").permitAll()
-                            .requestMatchers("/account/profile").hasAuthority("ROLE_ADMIN") // Restrict to ROLE_ADMIN
+                            .requestMatchers("/account/profile").hasAuthority("ROLE_ADMIN")
                             .anyRequest().authenticated()
                     )
                     .exceptionHandling(exceptionHandling -> exceptionHandling

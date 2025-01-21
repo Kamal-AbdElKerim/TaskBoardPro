@@ -13,9 +13,8 @@ public class TicketsDto {
     @NotBlank(message = "Ticket name is required.")
     private String name;
 
-    @NotNull(message = "Task status is required.")
     private TaskStatus taskStatus;
 
-    private TaskDto task; // Many-to-One relation
+    private Long taskID;
 }
 

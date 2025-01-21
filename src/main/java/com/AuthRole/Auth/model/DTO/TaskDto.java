@@ -29,6 +29,6 @@ public class TaskDto {
     @NotNull(message = "Task priority is required.")
     private TaskPriority taskPriority;
     private String assignedUserID;
-    private Long kanbanColumnID; // Many-to-One relation
-    private List<TicketsDto> tickets; // One-to-Many relation
+    private Long kanbanColumnID;
+    private List<TicketsDto> tickets;
 }

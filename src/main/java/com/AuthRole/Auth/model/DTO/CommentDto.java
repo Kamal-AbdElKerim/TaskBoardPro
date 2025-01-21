@@ -16,12 +16,10 @@ public class CommentDto {
     @NotBlank(message = "Content is required.")
     private String content;
 
-    @NotNull(message = "Creation date is required.")
-    private LocalDateTime createdAt;
 
     @NotNull(message = "Task is required.")
-    private TaskDto task; // Many-to-One relationship
+    private Long taskID; // Many-to-One relationship
 
     @NotNull(message = "User is required.")
-    private UserDto user; // Many-to-One relationship
+    private String userID; // Many-to-One relationship
 }

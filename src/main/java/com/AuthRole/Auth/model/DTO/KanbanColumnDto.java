@@ -8,15 +8,13 @@ import java.util.List;
 
 @Data
 public class KanbanColumnDto {
-    private Long id;
-
     @NotBlank(message = "Column name is required.")
     private String name;
 
     @NotNull(message = "Position is required.")
-    @Min(value = 0, message = "Position must be greater than or equal to 0.")
     private Integer position;
 
-    private ProjectDTO project; // Many-to-One relation
-    private List<TaskDto> tasks; // One-to-Many relation
+    @NotNull(message = "Project ID is required.")
+    private Long projectID;
+
 }

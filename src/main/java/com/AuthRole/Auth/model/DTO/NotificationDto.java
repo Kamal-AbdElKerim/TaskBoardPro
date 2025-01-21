@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class NotificationDto {
-    private Long id;
 
     @NotBlank(message = "Message is required.")
     private String message;
@@ -18,6 +17,7 @@ public class NotificationDto {
     @NotNull(message = "Read status is required.")
     private Boolean read;
 
+
+    private String userID; // Many-to-One relation
     private LocalDateTime createdAt;
-    private UserDto user; // Many-to-One relation
 }

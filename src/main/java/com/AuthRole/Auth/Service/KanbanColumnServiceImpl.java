@@ -1,6 +1,7 @@
 package com.AuthRole.Auth.Service;
 
 
+import com.AuthRole.Auth.Exception.EntityNotFoundException;
 import com.AuthRole.Auth.Service.Interface.KanbanColumnService;
 import com.AuthRole.Auth.model.DTO.KanbanColumnDto;
 import com.AuthRole.Auth.model.KanbanColumn;
@@ -31,8 +32,8 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
 
     @Override
     public KanbanColumnResponse createKanbanColumn(KanbanColumnDto kanbanColumnDto) {
-        Project project = projectRepository.findById(kanbanColumnDto.getProject().getId())
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+        Project project = projectRepository.findById(kanbanColumnDto.getProjectID())
+                .orElseThrow(() -> new EntityNotFoundException("Project","Project not found"));
 
         KanbanColumn kanbanColumn = kanbanColumnMapper.toEntity(kanbanColumnDto);
         kanbanColumn.setProject(project);
@@ -44,7 +45,7 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
     @Override
     public KanbanColumnResponse updateKanbanColumn(Long id, KanbanColumnDto kanbanColumnDto) {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Kanban column not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Kanban","Kanban column not found"));
 
         kanbanColumn.setName(kanbanColumnDto.getName());
         kanbanColumn.setPosition(kanbanColumnDto.getPosition());
@@ -56,7 +57,7 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
     @Override
     public void deleteKanbanColumn(Long id) {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Kanban column not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Kanban","Kanban column not found"));
 
         kanbanColumnRepository.delete(kanbanColumn);
     }
@@ -64,7 +65,7 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
     @Override
     public KanbanColumnResponse getKanbanColumnById(Long id) {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Kanban column not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Kanban","Kanban column not found"));
 
         return kanbanColumnMapper.toResponse(kanbanColumn);
     }
@@ -75,5 +76,16 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
                 .map(kanbanColumnMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<KanbanColumnResponse> getKanbanColumnsByProjectId(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project","Project not found"));
+
+        return kanbanColumnRepository.findByProject(project).stream()
+                .map(kanbanColumnMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
 }
 

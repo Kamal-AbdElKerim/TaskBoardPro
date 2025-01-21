@@ -17,4 +17,7 @@ public interface KanbanColumnService {
     KanbanColumnResponse getKanbanColumnById(Long id);
 
     List<KanbanColumnResponse> getAllKanbanColumns();
+
+    List<KanbanColumnResponse> getKanbanColumnsByProjectId(Long projectId);
+
 }

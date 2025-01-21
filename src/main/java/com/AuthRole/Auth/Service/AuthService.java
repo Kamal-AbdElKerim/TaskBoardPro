@@ -38,7 +38,6 @@ public class AuthService implements IAuthService {
         AppUser appUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("appUser", "appUser with email " + email + " not found"));
 
-        System.out.println(appUser.getAddress());
         // Map the AppUser to UserResponseDto
         UserResponseDto userResponseDto = userMapper.appUserToUserResponseDto(appUser);
         return ResponseEntity.ok(userResponseDto);

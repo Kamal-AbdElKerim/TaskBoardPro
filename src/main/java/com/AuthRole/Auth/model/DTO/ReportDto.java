@@ -19,5 +19,5 @@ public class ReportDto {
 
     private Boolean isSuccessful;
 
-    private ProjectDto project; // Many-to-One relation
+    private ProjectDTO project; // Many-to-One relation
 }

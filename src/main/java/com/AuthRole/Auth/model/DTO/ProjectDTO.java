@@ -5,10 +5,12 @@ import com.AuthRole.Auth.model.Auth.user.UserDto;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.List;
+import java.time.LocalDateTime;
+
 
 @Data
-public class ProjectDto {
+public class ProjectDTO {
+
     private Long id;
 
     @NotBlank(message = "Project name is required.")
@@ -18,7 +20,10 @@ public class ProjectDto {
     @Size(max = 500, message = "Description cannot exceed 500 characters.")
     private String description;
 
-    private List<TaskDto> tasks; // One-to-Many relation
-    private List<PermissionDto> permissions; // One-to-Many relation
-    private UserDto owner; // Many-to-One relation
+    @NotBlank(message = "Project IdCreatedBy is required.")
+    private String idCreatedBy;
+
+    private LocalDateTime createdAt;
+
+
 }

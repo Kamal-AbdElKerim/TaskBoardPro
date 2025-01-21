@@ -3,6 +3,7 @@ package com.AuthRole.Auth.config;
 import com.AuthRole.Auth.Service.AppUserService;
 import com.AuthRole.Auth.model.Auth.user.AppUser;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,8 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
@@ -47,13 +50,14 @@ import java.util.stream.Collectors;
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             return http
                     .csrf(AbstractHttpConfigurer::disable)
+                    .cors(cors -> {})
                     .authorizeHttpRequests(auth -> auth
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/account").permitAll()
                             .requestMatchers("/account/login").permitAll()
                             .requestMatchers("/account/register").permitAll()
                             .requestMatchers("/account/profile").hasAuthority("ROLE_ADMIN")
-                            .anyRequest().authenticated()
+                            .anyRequest().permitAll()
                     )
                     .exceptionHandling(exceptionHandling -> exceptionHandling
                             .authenticationEntryPoint(customAuthenticationEntryPoint) // Custom 401 handler
@@ -106,6 +110,7 @@ import java.util.stream.Collectors;
                 .expiresAt(now.plusSeconds(24 * 3600)) // 1 day expiration
                 .subject(appUser.getUsername())
                 .claim("roles", roles)
+                .claim("userID", appUser.getId())
                 .claim("email", appUser.getEmail())
                 .build();
 

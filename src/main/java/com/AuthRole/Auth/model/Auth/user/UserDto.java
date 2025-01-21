@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class UserDto {
 
-    private String userID ;
+    private String id ;
 
     @NotBlank(message = "Username is required and cannot be blank")
     private String username;
@@ -22,12 +22,6 @@ public class UserDto {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Phone number is required and cannot be blank")
-    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits")
-    private String phone;
-
-    @NotBlank(message = "Address is required and cannot be blank")
-    private String address;
 
     @NotBlank(message = "Password is required and cannot be blank")
     @Size(min = 6, message = "Minimum password length is 6 characters")

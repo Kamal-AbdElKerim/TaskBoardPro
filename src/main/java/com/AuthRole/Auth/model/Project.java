@@ -27,10 +27,8 @@ public class Project {
     @JoinColumn(name = "created_by", nullable = false)
     private AppUser createdBy;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Task> tasks;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<KanbanColumn> kanbanColumns;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)

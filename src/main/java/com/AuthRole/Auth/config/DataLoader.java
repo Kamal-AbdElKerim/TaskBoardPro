@@ -41,7 +41,7 @@ public class DataLoader {
                 AppUser admin = new AppUser();
                 admin.setUsername("admin");
                 admin.setEmail("admin@gmail.com");
-                admin.setUserID(accountService.generateUserID(admin));
+                admin.setId(accountService.generateUserID(admin));
                 admin.setPassword(bCryptEncoder.encode("admin"));
                 userRepository.save(admin);
 
@@ -57,7 +57,7 @@ public class DataLoader {
                 AppUser user = new AppUser();
                 user.setUsername("user");
                 user.setEmail("user@gmail.com");
-                user.setUserID(accountService.generateUserID(user));
+                user.setId(accountService.generateUserID(user));
                 user.setPassword(bCryptEncoder.encode("user"));
                 userRepository.save(user);
 

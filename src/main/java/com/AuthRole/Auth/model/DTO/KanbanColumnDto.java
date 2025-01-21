@@ -17,6 +17,6 @@ public class KanbanColumnDto {
     @Min(value = 0, message = "Position must be greater than or equal to 0.")
     private Integer position;
 
-    private ProjectDto project; // Many-to-One relation
+    private ProjectDTO project; // Many-to-One relation
     private List<TaskDto> tasks; // One-to-Many relation
 }

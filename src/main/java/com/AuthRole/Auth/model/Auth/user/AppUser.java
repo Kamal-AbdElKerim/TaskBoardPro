@@ -17,19 +17,11 @@ import java.util.List;
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String userID ;
+    private String id;
 
     private String username;
 
     private String email;
-
-    @Column(length = 10)
-    private String phone;
-
-    private String address;
 
     private String password;
 
@@ -51,5 +43,6 @@ public class AppUser {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Comment> comments;
+
 
 }

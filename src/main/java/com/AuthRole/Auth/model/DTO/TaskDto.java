@@ -1,6 +1,7 @@
 package com.AuthRole.Auth.model.DTO;
 
 
+import com.AuthRole.Auth.model.Auth.user.AppUser;
 import com.AuthRole.Auth.model.TaskPriority;
 import com.AuthRole.Auth.model.TaskStatus;
 import jakarta.validation.constraints.*;
@@ -20,18 +21,14 @@ public class TaskDto {
     @Size(max = 500, message = "Description cannot exceed 500 characters.")
     private String description;
 
-    @NotNull(message = "Start date is required.")
     private LocalDateTime startDate;
 
-    @NotNull(message = "End date is required.")
     @Future(message = "End date must be in the future.")
     private LocalDateTime endDate;
 
     @NotNull(message = "Task priority is required.")
     private TaskPriority taskPriority;
-
-    private TaskStatus taskStatus; // Enum for status
-    private KanbanColumnDto kanbanColumn; // Many-to-One relation
+    private String assignedUserID;
+    private Long kanbanColumnID; // Many-to-One relation
     private List<TicketsDto> tickets; // One-to-Many relation
-    private ProjectDto project; // Many-to-One relation
 }

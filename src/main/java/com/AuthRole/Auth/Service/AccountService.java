@@ -15,6 +15,7 @@ import com.AuthRole.Auth.repository.RoleRepository;
 import com.AuthRole.Auth.repository.UserRepository;
 import com.AuthRole.Auth.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,9 +39,14 @@ public class AccountService implements IAccountService {
 
     @Override
     public ResponseEntity<Object> Login(LoginDto loginDto){
-        // Authenticate the user
+
+        return LoginLog(loginDto.getEmail(), loginDto.getPassword());
+
+    }
+
+    public ResponseEntity<Object> LoginLog (String email, String passwod) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
+                new UsernamePasswordAuthenticationToken(email, passwod)
         );
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -49,28 +55,26 @@ public class AccountService implements IAccountService {
             System.out.println("Role: " + authority.getAuthority());
         }
 
-        AppUser user = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("User", "User not found with email: " + loginDto.getEmail()));
+        AppUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User", "User not found with email: " + email));
         return generateJwtTokenResponse(user);
-
     }
 
     @Override
-    public ResponseEntity<Object> createUser(UserDto userDto){
+    public ResponseEntity<Object> createUser(UserDto userDto) {
         var bCryptEncoder = new BCryptPasswordEncoder();
 
         AppUser appuser = userMapper.UserDtoToAppUser(userDto);
 
-
         Optional<AppUser> otherUser = userRepository.findByEmail(userDto.getEmail());
         if (otherUser.isPresent()) {
-            throw new EntityAlreadyExistsException("Email", "Email address already used.");
+            return LoginLog(userDto.getEmail(), userDto.getPassword());
         }
 
         Role ROLE_USER = roleRepository.findByRoleName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Default role not found!"));
 
-        appuser.setUserID(generateUserID(appuser));
+        appuser.setId(generateUserID(appuser));
         appuser.setPassword(bCryptEncoder.encode(userDto.getPassword()));
 
         // Initialize userRoles list if it's not initialized
@@ -78,17 +82,23 @@ public class AccountService implements IAccountService {
             appuser.setUserRoles(new ArrayList<>());
         }
 
-        // Create and add the UserRole to the user's userRoles list
-        UserRole userRole = UserRole.builder()
-                .appUser(appuser)
-                .role(ROLE_USER)
-                .build();
+        // Save the AppUser first
+        appuser = userRepository.save(appuser);
 
-        appuser.getUserRoles().add(userRole);
+        // Check if the user already has the ROLE_USER role
+        boolean hasRoleUser = appuser.getUserRoles().stream()
+                .anyMatch(userRole -> userRole.getRole().equals(ROLE_USER));
 
-        // Save the new user and the UserRole association
-        userRepository.save(appuser);
-        userRoleRepository.save(userRole);
+        if (!hasRoleUser) {
+            // Create and add the UserRole to the user's userRoles list
+            UserRole userRole = UserRole.builder()
+                    .appUser(appuser)
+                    .role(ROLE_USER)
+                    .build();
+
+            userRoleRepository.save(userRole);
+            appuser.getUserRoles().add(userRole);
+        }
 
         return generateJwtTokenResponse(appuser);
     }

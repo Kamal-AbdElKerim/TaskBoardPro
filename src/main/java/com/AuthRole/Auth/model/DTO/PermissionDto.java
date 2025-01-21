@@ -12,5 +12,5 @@ public class PermissionDto {
     @NotNull(message = "Permission type is required.")
     private PermissionType permissionType;
 
-    private ProjectDto project; // Many-to-One relation
+    private ProjectDTO project; // Many-to-One relation
 }

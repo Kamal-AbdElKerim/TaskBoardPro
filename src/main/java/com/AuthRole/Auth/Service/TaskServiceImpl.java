@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponse createTask(TaskDto taskDTO) {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(taskDTO.getKanbanColumnID())
-                .orElseThrow(() -> new RuntimeException("kanbanColumn not found"));
+                .orElseThrow(() -> new EntityNotFoundException("kanbanColumn","kanbanColumn not found"));
 
         Task task = taskMapper.toEntity(taskDTO);
         task.setKanbanColumn(kanbanColumn);
@@ -53,26 +53,54 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskResponse updateTask(Long id, TaskDto taskDTO) {
-//        Task task = taskRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Task not found"));
+        // Fetch the existing task from the repository
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task","Task not found"));
 
-        AppUser assignedTo = userRepository.findById(taskDTO.getAssignedUserID())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Update the fields of the existing task object with values from taskDTO
+        if (taskDTO.getTitle() != null && !taskDTO.getTitle().isEmpty()) {
+            task.setTitle(taskDTO.getTitle());  // Update task title
+        }
 
+        if (taskDTO.getDescription() != null && !taskDTO.getDescription().isEmpty()) {
+            task.setDescription(taskDTO.getDescription());  // Update description
+        }
 
-        Task Updatetask = taskMapper.toEntity(taskDTO);
+        if (taskDTO.getStartDate() != null ) {
+            task.setStartDate(taskDTO.getStartDate());  // Update start date
+        }
 
+        if (taskDTO.getEndDate() != null) {
+            task.setEndDate(taskDTO.getEndDate());  // Update end date
+        }
 
-        Updatetask.setAssignedUser(assignedTo);
+        if (taskDTO.getTaskPriority() != null) {
+            task.setTaskPriority(taskDTO.getTaskPriority());  // Update task priority
+        }
+        System.out.println("taskDTO.getAssignedUserID()" + taskDTO.getAssignedUserID());
+        if (taskDTO.getAssignedUserID() != null) {
+            AppUser assignedTo = userRepository.findById(taskDTO.getAssignedUserID())
+                    .orElseThrow(() -> new EntityNotFoundException("User","User not found"));
+            task.setAssignedUser(assignedTo);  // Update assigned user
+        }
 
-        Task updatedTask = taskRepository.save(Updatetask);
+        if (taskDTO.getKanbanColumnID() != null) {
+            KanbanColumn kanbanColumn = kanbanColumnRepository.findById(taskDTO.getKanbanColumnID())
+                    .orElseThrow(() -> new EntityNotFoundException("Kanban" ,"Kanban column not found"));
+            task.setKanbanColumn(kanbanColumn);  // Update Kanban column
+        }
+
+        // Save the updated task to the database
+        Task updatedTask = taskRepository.save(task);
+
+        // Return the updated task as a response
         return taskMapper.toResponse(updatedTask);
     }
 
     @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Task","Task not found"));
 
         taskRepository.delete(task);
     }
@@ -80,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskResponse getTaskById(Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Task" ,"Task not found"));
 
         return taskMapper.toResponse(task);
     }

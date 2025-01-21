@@ -11,7 +11,6 @@ public interface CommentMapper {
 
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(source = "task.id", target = "taskID")
-    @Mapping(source = "user.id", target = "userID")
+
     CommentResponse toResponse(Comment comment);
 }

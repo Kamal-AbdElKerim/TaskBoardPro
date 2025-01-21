@@ -30,7 +30,9 @@ public class TaskResponse {
 
     private Long kanbanColumnID;
 
-    private List<Comment> Comments;
+    private List<CommentResponse> Comments;
+
+    private List<TicketResponse> Tickets;
 
     private LocalDateTime createdAt;
 }

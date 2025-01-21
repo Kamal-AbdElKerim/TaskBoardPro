@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Data
 public class CommentDto {
 
-    private Long id;
-
     @NotBlank(message = "Content is required.")
     private String content;
 

@@ -42,6 +42,9 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Comment> Comments;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

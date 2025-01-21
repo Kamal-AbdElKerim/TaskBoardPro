@@ -32,7 +32,7 @@ public class Project {
     private List<KanbanColumn> kanbanColumns;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Permission> Permission;
+    private List<Permission> Permissions;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

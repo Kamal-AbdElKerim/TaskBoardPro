@@ -41,7 +41,7 @@ public class PermissionServiceImpl implements PermissionService {
         Project project = projectRepository.findById(permissionDto.getProjectID())
                 .orElseThrow(() -> new EntityNotFoundException("Project", "Project not found"));
 
-        // Fetch the User by its ID
+        // Fetch the User by its ID (string type)
         AppUser createdByUser = userRepository.findById(permissionDto.getUserID())
                 .orElseThrow(() -> new EntityNotFoundException("User", "User not found"));
 

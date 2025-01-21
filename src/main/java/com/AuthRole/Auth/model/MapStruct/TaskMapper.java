@@ -7,7 +7,7 @@ import com.AuthRole.Auth.model.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring" , uses = {TicketMapper.class})
 public interface TaskMapper {
 
     // Map Task to TaskResponse

@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface ProjectMapper {
 
     @Mapping(target = "kanbanColumns", source = "kanbanColumns")
+    @Mapping(target = "permissions", source = "permissions")
     ProjectResponse toResponse(Project project);
 
     @Mapping(target = "createdBy", ignore = true)

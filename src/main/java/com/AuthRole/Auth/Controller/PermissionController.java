@@ -3,6 +3,7 @@ package com.AuthRole.Auth.Controller;
 import com.AuthRole.Auth.Service.Interface.PermissionService;
 import com.AuthRole.Auth.model.DTO.PermissionDto;
 import com.AuthRole.Auth.model.Response.PermissionResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/permissions")
+@RequestMapping("/api/permissions")
 public class PermissionController {
 
     private final PermissionService permissionService;
@@ -20,7 +21,7 @@ public class PermissionController {
     }
 
     @PostMapping
-    public ResponseEntity<PermissionResponse> createPermission(@Validated @RequestBody PermissionDto permissionDto) {
+    public ResponseEntity<PermissionResponse> createPermission(@Valid @RequestBody PermissionDto permissionDto) {
         return ResponseEntity.ok(permissionService.createPermission(permissionDto));
     }
 

@@ -38,7 +38,7 @@ public class TicketServiceImpl implements TicketService {
         // Create and save ticket
         Ticket ticket = ticketMapper.toEntity(ticketsDto);
         ticket.setTask(task);  // Set the task associated with the ticket
-        ticket.setTaskStatus(TaskStatus.TODO);
+        ticket.setTaskStatus(ticketsDto.getTaskStatus());
         Ticket savedTicket = ticketRepository.save(ticket);
 
         return ticketMapper.toResponse(savedTicket);
@@ -48,7 +48,6 @@ public class TicketServiceImpl implements TicketService {
     public TicketResponse updateTicket(Long id, TicketsDto ticketsDto) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ticket", "Ticket not found"));
-
         // Map updated fields from DTO
         if (ticketsDto.getName() != null && !ticketsDto.getName().isEmpty()) {
             ticket.setName(ticketsDto.getName());

@@ -10,7 +10,12 @@ import com.AuthRole.Auth.model.Project;
 import com.AuthRole.Auth.model.Response.KanbanColumnResponse;
 import com.AuthRole.Auth.repository.KanbanColumnRepository;
 import com.AuthRole.Auth.repository.ProjectRepository;
+import com.AuthRole.Auth.repository.TaskRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +26,15 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
     private final KanbanColumnRepository kanbanColumnRepository;
     private final ProjectRepository projectRepository;
     private final KanbanColumnMapper kanbanColumnMapper;
+    private final TaskRepository taskRepository;
 
     public KanbanColumnServiceImpl(KanbanColumnRepository kanbanColumnRepository,
                                    ProjectRepository projectRepository,
-                                   KanbanColumnMapper kanbanColumnMapper) {
+                                   KanbanColumnMapper kanbanColumnMapper, TaskRepository taskRepository) {
         this.kanbanColumnRepository = kanbanColumnRepository;
         this.projectRepository = projectRepository;
         this.kanbanColumnMapper = kanbanColumnMapper;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -43,12 +50,11 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
     }
 
     @Override
-    public KanbanColumnResponse updateKanbanColumn(Long id, KanbanColumnDto kanbanColumnDto) {
+    public KanbanColumnResponse updateKanbanColumn(Long id, String kanbanColumnDto) {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Kanban","Kanban column not found"));
 
-        kanbanColumn.setName(kanbanColumnDto.getName());
-        kanbanColumn.setPosition(kanbanColumnDto.getPosition());
+        kanbanColumn.setName(kanbanColumnDto);
 
         KanbanColumn updatedColumn = kanbanColumnRepository.save(kanbanColumn);
         return kanbanColumnMapper.toResponse(updatedColumn);
@@ -59,8 +65,12 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Kanban","Kanban column not found"));
 
+
+        // Now delete the Kanban column
         kanbanColumnRepository.delete(kanbanColumn);
     }
+
+
 
     @Override
     public KanbanColumnResponse getKanbanColumnById(Long id) {
@@ -86,6 +96,21 @@ public class KanbanColumnServiceImpl implements KanbanColumnService {
                 .map(kanbanColumnMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void updateColumnPositions(List<KanbanColumnDto> kanbanColumns) {
+        List<KanbanColumn> updatedColumns = kanbanColumns.stream()
+                .map(dto -> {
+                    KanbanColumn column = kanbanColumnRepository.findById(dto.getId())
+                            .orElseThrow(() -> new EntityNotFoundException("Kanban", "Kanban column not found"));
+                    column.setPosition(dto.getPosition());
+                    return column;
+                })
+                .collect(Collectors.toList());
+
+        kanbanColumnRepository.saveAll(updatedColumns);
+    }
+
 
 }
 

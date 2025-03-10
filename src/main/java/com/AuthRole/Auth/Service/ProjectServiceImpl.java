@@ -104,7 +104,6 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProject(Long id) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Project","Project not found"));
-
         projectRepository.delete(project);
     }
 

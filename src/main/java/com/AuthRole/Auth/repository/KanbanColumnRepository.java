@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface KanbanColumnRepository extends JpaRepository<KanbanColumn, Long> {
     List<KanbanColumn> findByProject(Project project);
+
 }

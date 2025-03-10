@@ -8,6 +8,9 @@ import java.util.List;
 
 @Data
 public class KanbanColumnDto {
+
+    private Long id;
+
     @NotBlank(message = "Column name is required.")
     private String name;
 

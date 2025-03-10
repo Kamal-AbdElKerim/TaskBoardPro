@@ -34,5 +34,7 @@ public class TaskResponse {
 
     private List<TicketResponse> Tickets;
 
+    private Integer order;
+
     private LocalDateTime createdAt;
 }

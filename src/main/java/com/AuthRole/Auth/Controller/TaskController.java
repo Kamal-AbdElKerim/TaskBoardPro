@@ -2,10 +2,12 @@ package com.AuthRole.Auth.Controller;
 
 import com.AuthRole.Auth.Service.Interface.TaskService;
 import com.AuthRole.Auth.model.DTO.TaskDto;
+import com.AuthRole.Auth.model.DTO.TaskOrderDTO;
 import com.AuthRole.Auth.model.Response.TaskResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -53,4 +55,15 @@ public class TaskController {
         List<TaskResponse> tasks = taskService.getAllTasksByKanbanColumn(KanbanColumnID);
         return ResponseEntity.ok(tasks);
     }
+
+    @PutMapping("/order")
+    public ResponseEntity<?> updateTaskOrder(@RequestBody List<TaskDto> newOrder) {
+        taskService.updateTaskOrder(newOrder);
+
+        // Return a JSON object instead of a plain string
+        return ResponseEntity.ok(Collections.singletonMap("message", "Task order updated"));
+    }
+
+
+
 }

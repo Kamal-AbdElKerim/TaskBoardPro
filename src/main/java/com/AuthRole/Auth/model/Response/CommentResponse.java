@@ -7,7 +7,5 @@ import java.time.LocalDateTime;
 public class CommentResponse {
     private Long id;
     private String content;
-    private Long taskID;
-    private String userID;
     private LocalDateTime createdAt;
 }

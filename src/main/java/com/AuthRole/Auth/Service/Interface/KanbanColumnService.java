@@ -10,7 +10,7 @@ public interface KanbanColumnService {
 
     KanbanColumnResponse createKanbanColumn(KanbanColumnDto kanbanColumnDto);
 
-    KanbanColumnResponse updateKanbanColumn(Long id, KanbanColumnDto kanbanColumnDto);
+    KanbanColumnResponse updateKanbanColumn(Long id, String kanbanColumnDto);
 
     void deleteKanbanColumn(Long id);
 
@@ -19,5 +19,8 @@ public interface KanbanColumnService {
     List<KanbanColumnResponse> getAllKanbanColumns();
 
     List<KanbanColumnResponse> getKanbanColumnsByProjectId(Long projectId);
+
+    void updateColumnPositions(List<KanbanColumnDto> kanbanColumns);
+
 
 }

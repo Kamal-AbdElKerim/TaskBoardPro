@@ -14,5 +14,5 @@ public class ProjectResponse {
     private UserResponseDto createdBy;
     private LocalDateTime createdAt;
     private List<KanbanColumnResponse> kanbanColumns;
-    private List<PermissionResponse> permissions;
+    private List<PermissionResponse> Permissions;
 }

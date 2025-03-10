@@ -8,5 +8,5 @@ public class PermissionResponse {
     private Long id;
     private PermissionType permissionType;
     private Long projectId;
-    private Long userID;
+    private String userID;
 }

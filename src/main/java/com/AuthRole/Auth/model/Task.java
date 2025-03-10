@@ -42,6 +42,12 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Comment> Comments;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
+
+    @Column(name = "task_order") // Ensure this matches the database column name
+    private Integer order;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/account")
+@RequestMapping("api/account")
 public class AccountController {
 
     private final IAccountService accountService;

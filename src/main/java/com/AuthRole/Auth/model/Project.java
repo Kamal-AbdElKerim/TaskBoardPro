@@ -28,11 +28,11 @@ public class Project {
     private AppUser createdBy;
 
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<KanbanColumn> kanbanColumns;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<Permission> Permission;
+    private List<Permission> Permissions;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

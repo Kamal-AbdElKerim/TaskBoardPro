@@ -26,6 +26,8 @@ public class TaskDto {
     @Future(message = "End date must be in the future.")
     private LocalDateTime endDate;
 
+    private Integer order;
+
     @NotNull(message = "Task priority is required.")
     private TaskPriority taskPriority;
     private String assignedUserID;

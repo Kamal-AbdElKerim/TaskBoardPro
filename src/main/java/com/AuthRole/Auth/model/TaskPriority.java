@@ -2,7 +2,8 @@ package com.AuthRole.Auth.model;
 
 
 public enum TaskPriority {
+    VERYLOW,
     LOW,
-    MEDIUM,
-    HIGH
+    HIGH,
+    VERYHIGH
 }

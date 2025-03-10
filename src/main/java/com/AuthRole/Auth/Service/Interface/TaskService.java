@@ -2,6 +2,7 @@ package com.AuthRole.Auth.Service.Interface;
 
 
 import com.AuthRole.Auth.model.DTO.TaskDto;
+import com.AuthRole.Auth.model.DTO.TaskOrderDTO;
 import com.AuthRole.Auth.model.Response.TaskResponse;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface TaskService {
     List<TaskResponse> getAllTasks();
 
     List<TaskResponse> getAllTasksByKanbanColumn(Long KanbanColumnID);
+
+    void updateTaskOrder( List<TaskDto> newOrder);
 }

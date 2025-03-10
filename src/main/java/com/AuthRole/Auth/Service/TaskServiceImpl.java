@@ -5,6 +5,7 @@ import com.AuthRole.Auth.Exception.EntityNotFoundException;
 import com.AuthRole.Auth.Service.Interface.TaskService;
 import com.AuthRole.Auth.model.Auth.user.AppUser;
 import com.AuthRole.Auth.model.DTO.TaskDto;
+import com.AuthRole.Auth.model.DTO.TaskOrderDTO;
 import com.AuthRole.Auth.model.KanbanColumn;
 import com.AuthRole.Auth.model.MapStruct.TaskMapper;
 import com.AuthRole.Auth.model.Project;
@@ -55,7 +56,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse updateTask(Long id, TaskDto taskDTO) {
         // Fetch the existing task from the repository
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Task","Task not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Task", "Task not found"));
 
         // Update the fields of the existing task object with values from taskDTO
         if (taskDTO.getTitle() != null && !taskDTO.getTitle().isEmpty()) {
@@ -66,7 +67,7 @@ public class TaskServiceImpl implements TaskService {
             task.setDescription(taskDTO.getDescription());  // Update description
         }
 
-        if (taskDTO.getStartDate() != null ) {
+        if (taskDTO.getStartDate() != null) {
             task.setStartDate(taskDTO.getStartDate());  // Update start date
         }
 
@@ -77,16 +78,17 @@ public class TaskServiceImpl implements TaskService {
         if (taskDTO.getTaskPriority() != null) {
             task.setTaskPriority(taskDTO.getTaskPriority());  // Update task priority
         }
-        System.out.println("taskDTO.getAssignedUserID()" + taskDTO.getAssignedUserID());
+
+        // Fetch and update assigned user
         if (taskDTO.getAssignedUserID() != null) {
             AppUser assignedTo = userRepository.findById(taskDTO.getAssignedUserID())
-                    .orElseThrow(() -> new EntityNotFoundException("User","User not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("User", "User not found"));
             task.setAssignedUser(assignedTo);  // Update assigned user
         }
 
         if (taskDTO.getKanbanColumnID() != null) {
             KanbanColumn kanbanColumn = kanbanColumnRepository.findById(taskDTO.getKanbanColumnID())
-                    .orElseThrow(() -> new EntityNotFoundException("Kanban" ,"Kanban column not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Kanban", "Kanban column not found"));
             task.setKanbanColumn(kanbanColumn);  // Update Kanban column
         }
 
@@ -96,6 +98,7 @@ public class TaskServiceImpl implements TaskService {
         // Return the updated task as a response
         return taskMapper.toResponse(updatedTask);
     }
+
 
     @Override
     public void deleteTask(Long id) {
@@ -123,10 +126,27 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskResponse> getAllTasksByKanbanColumn(Long kanbanColumnID) {
         KanbanColumn kanbanColumn = kanbanColumnRepository.findById(kanbanColumnID)
-                .orElseThrow(() -> new EntityNotFoundException("kanbanColumn" ,"kanbanColumn not found"));
+                .orElseThrow(() -> new EntityNotFoundException("kanbanColumn", "KanbanColumn not found"));
 
-        return taskRepository.findByKanbanColumn(kanbanColumn).stream()
+        return taskRepository.findByKanbanColumnOrderByOrder(kanbanColumn).stream()
                 .map(taskMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void updateTaskOrder(List<TaskDto> newOrder) {
+        for (TaskDto dto : newOrder) {
+            // Fetch each task by its ID
+            Task task = taskRepository.findById(dto.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Task", "Task not found with ID: " + dto.getId()));
+
+            // Update the order
+            task.setOrder(dto.getOrder());
+
+            // Save the updated task
+            taskRepository.save(task);
+        }
+    }
+
+
 }

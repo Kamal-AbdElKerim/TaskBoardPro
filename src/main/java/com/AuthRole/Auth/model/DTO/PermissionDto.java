@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class PermissionDto {
-    private Long id;
 
     @NotNull(message = "Permission type is required.")
     private PermissionType permissionType;

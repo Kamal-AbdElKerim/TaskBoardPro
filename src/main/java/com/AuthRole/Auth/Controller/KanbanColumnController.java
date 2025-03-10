@@ -30,7 +30,7 @@ public class KanbanColumnController {
     @PutMapping("/{id}")
     public ResponseEntity<KanbanColumnResponse> updateKanbanColumn(
             @PathVariable Long id,
-            @Valid @RequestBody KanbanColumnDto kanbanColumnDto) {
+            @Valid @RequestBody String kanbanColumnDto) {
         KanbanColumnResponse response = kanbanColumnService.updateKanbanColumn(id, kanbanColumnDto);
         return ResponseEntity.ok(response);
     }
